@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistente Salud - Tami</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <div class="contenedor-pagina">
+
+        <aside class="menu-lateral">
+            <div class="logo-titulo">
+                <i class="fa-solid fa-heartbeat"></i>
+                <span class="titulo-asistente">Asistente Salud</span>
+            </div>
+
+            <div class="seccion-bienvenida">
+                <h2>Bienvenido/a</h2>
+                <p>Use la columna central para hablar con la IA. Los botones grandes de abajo lo llevan a su Perfil Médico y Calendario.</p>
+            </div>
+
+            <nav class="navegacion-principal">
+                <button class="btn-menu activo">
+                    <i class="fa-solid fa-stars"></i>
+                    Asistente Tami
+                </button>
+                <button class="btn-menu">
+                    <i class="fa-solid fa-notes-medical"></i>
+                    Perfil Médico
+                </button>
+                <button class="btn-menu">
+                    <i class="fa-solid fa-calendar-alt"></i>
+                    Calendario
+                </button>
+            </nav>
+
+            <div class="seccion-sugerencias">
+                <h3>Sugerencias</h3>
+                <ul>
+                    <li>Use "Asistente Tami" para pedir recordatorios o hacer preguntas.</li>
+                    <li>Abra "Perfil Médico" para ver alergias, medicación y contactos de emergencia.</li>
+                    <li>Entre a "Calendario" para visualizar sus próximas consultas médicas.</li>
+                    <li>Toque una sola vez el botón que necesita.</li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="contenido-principal">
+            <div class="tarjeta-asistente">
+                <div class="icono-central">
+                    <i class="fa-solid fa-sparkles"></i>
+                </div>
+
+                <div class="interaccion-chat">
+                    <button class="btn-chat btn-hablar">
+                        <i class="fa-solid fa-microphone"></i>
+                        Hablar con Tami
+                    </button>
+                    <button class="btn-chat btn-detener">
+                        <i class="fa-solid fa-stop-circle"></i>
+                        Detener
+                    </button>
+                </div>
+
+                <p class="instruccion">Entre a *"Calendario"* para visualizar sus próximas consultas médicas.</p>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

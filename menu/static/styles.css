@@ -1,0 +1,242 @@
+/* Variables para colores (facilita la modificación) */
+:root {
+    --color-principal: #3498db; /* Azul base */
+    --color-fondo-claro: #f4f6f9; /* Gris muy claro para el fondo */
+    --color-fondo-menu: #e8f0f6; /* Azul claro para el menú */
+    --color-texto-oscuro: #333;
+    --color-texto-claro: #555;
+    --color-sugerencias: #6c757d; /* Gris para el texto secundario */
+    --color-card-fondo: #ffffff;
+    --color-card-icono-fondo: #f1f7fe;
+    --color-activo-fondo: #007bff; /* Azul más oscuro para botón activo */
+    --color-activo-texto: #ffffff;
+    --color-detener: #dc3545; /* Rojo para botón Detener */
+}
+
+/* Estilos Globales */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-fondo-claro);
+    color: var(--color-texto-oscuro);
+    height: 100vh;
+    display: flex;
+}
+
+/* Contenedor Principal con Layout de Dos Columnas (Flexbox) */
+.contenedor-pagina {
+    display: flex;
+    width: 100%;
+}
+
+/* Estilos del Menú Lateral (Columna Izquierda) */
+.menu-lateral {
+    width: 300px; /* Ancho fijo para el menú */
+    background-color: var(--color-fondo-menu);
+    padding: 30px 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-titulo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    font-weight: 600;
+    color: var(--color-principal);
+}
+
+.logo-titulo i {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.titulo-asistente {
+    font-size: 18px;
+}
+
+/* Estilos de la Sección de Bienvenida */
+.seccion-bienvenida {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #c9d7e4; /* Línea separadora */
+}
+
+.seccion-bienvenida h2 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--color-texto-oscuro);
+}
+
+.seccion-bienvenida p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-texto-claro);
+}
+
+/* Botones del Menú */
+.navegacion-principal {
+    margin-bottom: 30px;
+}
+
+.btn-menu {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: transparent;
+    transition: all 0.2s ease;
+    color: var(--color-texto-claro);
+}
+
+.btn-menu i {
+    margin-right: 10px;
+    font-size: 18px;
+    width: 25px; /* Para alinear los iconos */
+}
+
+.btn-menu:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.btn-menu.activo {
+    background-color: var(--color-activo-fondo);
+    color: var(--color-activo-texto);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos de Sugerencias */
+.seccion-sugerencias h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--color-texto-oscuro);
+}
+
+.seccion-sugerencias ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.seccion-sugerencias li {
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--color-sugerencias);
+    margin-bottom: 8px;
+    position: relative;
+    padding-left: 10px;
+}
+
+/* Simular el punto de la lista */
+.seccion-sugerencias li::before {
+    content: "•";
+    color: var(--color-principal);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+/* --- Contenido Principal (Columna Derecha) --- */
+.contenido-principal {
+    flex-grow: 1;
+    padding: 50px;
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+}
+
+/* Estilos de la Tarjeta del Asistente (La IA Tami) */
+.tarjeta-asistente {
+    background-color: var(--color-card-fondo);
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.icono-central {
+    background-color: var(--color-card-icono-fondo);
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.icono-central i {
+    font-size: 40px;
+    color: var(--color-principal);
+    /* Sutil efecto de brillo para el icono */
+    text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
+/* Interacción de Chat */
+.interaccion-chat {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.btn-chat {
+    display: flex;
+    align-items: center;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-chat i {
+    margin-right: 10px;
+}
+
+.btn-hablar {
+    background-color: var(--color-principal);
+    color: var(--color-activo-texto);
+}
+
+.btn-hablar:hover {
+    background-color: #2980b9;
+}
+
+.btn-detener {
+    background-color: var(--color-detener);
+    color: var(--color-activo-texto);
+}
+
+.btn-detener:hover {
+    background-color: #c0392b;
+}
+
+.instruccion {
+    font-size: 15px;
+    color: var(--color-texto-claro);
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+    margin-bottom: 0;
+}
+
+.instruccion strong {
+    font-weight: 600;
+}
