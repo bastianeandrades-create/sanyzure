@@ -1,0 +1,7 @@
+# Python cache y entorno
+*.pyc
+__pycache__/
+venv/
+
+# Base de datos de Django
+db.sqlite3
