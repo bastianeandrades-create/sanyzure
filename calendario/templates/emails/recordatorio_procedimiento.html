@@ -1,0 +1,16 @@
+{% extends "emails/recordatorio_base.html" %}
+
+{% block contenido %}
+<p>Te recordamos tu próximo <strong>procedimiento médico</strong>:</p>
+<div class="highlight">
+    <p><strong>Procedimiento:</strong> {{ evento.titulo }}</p>
+    <p><strong>Fecha y Hora:</strong> {{ fecha_hora_evento|date:"l, d \d\e F \d\e Y \a \l\a\s H:i" }} hrs</p>
+    {% if evento.descripcion %}
+        <p><strong>Indicaciones Previas / Detalles:</strong></p>
+        <p>{{ evento.descripcion|linebreaksbr }}</p>
+    {% else %}
+        <p><strong>Indicaciones Previas / Detalles:</strong> Sigue las indicaciones proporcionadas por tu médico.</p>
+    {% endif %}
+</div>
+<p>Asegúrate de seguir todas las instrucciones de preparación.</p>
+{% endblock %}

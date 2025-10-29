@@ -9,6 +9,11 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import os
+from dotenv import load_dotenv
+
+# Carga las variables desde el archivo .env
+load_dotenv()
 
 from pathlib import Path
 
@@ -31,14 +36,23 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # ... otras apps de Django ...
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'login', 
-    'menu',
+
+    # Apps de terceros
+    'rest_framework',      
+
+    # nuestras apps
+    'calendario',        
+    'login',              
+    'menu',                
+    'perfil_médico',       
+ 
 ]
 
 MIDDLEWARE = [
@@ -106,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Santiago'
 
 USE_I18N = True
 
@@ -124,3 +138,41 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
   
+# Configuración de Brevo (Sendinblue)
+BREVO_API_KEY = os.getenv('BREVO_API_KEY')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER') # Email desde el que se enviarán
+
+# Configuración básica de Logging (útil para depurar)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO', # Cambia a 'DEBUG' si necesitas más detalles
+    },
+    # Logger específico para tu app (opcional)
+    'loggers': {
+        'calendario': {
+            'handlers': ['console'],
+            'level': 'DEBUG', # Captura todo de tu app
+            'propagate': False,
+        },
+    }
+}
+
+# Configuración básica de Django REST Framework (opcional)
+REST_FRAMEWORK = {
+    # Usar autenticación por sesión (login de Django) en la API navegable
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    # Requerir que los usuarios estén logueados para acceder a la API
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated', 
+    ]
+}

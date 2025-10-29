@@ -18,10 +18,12 @@ from django.contrib import admin
 from django.urls import path
 from login.views import user_login
 from menu.views import menu_view
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/',user_login, name='login'),
-    path('menu/',menu_view,name='menu')
-    
+    path('calendario/', include('calendario.urls')), 
+    path('login/', include('login.urls')),  
+    path('menu/', include('menu.urls')),
+
 ]

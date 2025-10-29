@@ -1,0 +1,19 @@
+{% extends "emails/recordatorio_base.html" %}
+
+{% block contenido %}
+<p>Es momento de tomar tu <strong>remedio</strong>:</p>
+<div class="highlight">
+    <p><strong>Remedio:</strong> {{ evento.titulo }}</p>
+    <p><strong>Hora programada:</strong> {{ fecha_hora_evento|date:"l, d \d\e F \d\e Y \a \l\a\s H:i" }} hrs</p>
+    {% if evento.descripcion %}
+        <p><strong>Indicaciones:</strong></p>
+        <p>{{ evento.descripcion|linebreaksbr }}</p>
+    {% else %}
+        <p><strong>Indicaciones:</strong> Sigue las indicaciones médicas o del envase.</p>
+    {% endif %}
+    {% if evento.frecuencia_horas %}
+        <p><em>Recuerda tomarlo cada {{ evento.frecuencia_horas }} horas.</em></p>
+    {% endif %}
+</div>
+<p>No olvides tomar tu medicamento según lo prescrito.</p>
+{% endblock %}

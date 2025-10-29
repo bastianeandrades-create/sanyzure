@@ -1,0 +1,16 @@
+{% extends "emails/recordatorio_base.html" %}
+
+{% block contenido %}
+<p>Te recordamos tu próxima <strong>cita médica</strong>:</p>
+<div class="highlight">
+    <p><strong>Evento:</strong> {{ evento.titulo }}</p>
+    <p><strong>Fecha y Hora:</strong> {{ fecha_hora_evento|date:"l, d \d\e F \d\e Y \a \l\a\s H:i" }} hrs</p>
+    {% if evento.descripcion %}
+        <p><strong>Detalles/Indicaciones:</strong></p>
+        <p>{{ evento.descripcion|linebreaksbr }}</p>
+    {% else %}
+        <p><strong>Detalles/Indicaciones:</strong> Sin detalles adicionales.</p>
+    {% endif %}
+</div>
+<p>Por favor, llega con unos minutos de antelación.</p>
+{% endblock %}

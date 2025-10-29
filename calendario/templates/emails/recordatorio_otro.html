@@ -1,0 +1,15 @@
+{% extends "emails/recordatorio_base.html" %}
+
+{% block contenido %}
+<p>Tienes el siguiente <strong>recordatorio médico</strong>:</p>
+<div class="highlight">
+    <p><strong>Título:</strong> {{ evento.titulo }}</p>
+    <p><strong>Fecha y Hora:</strong> {{ fecha_hora_evento|date:"l, d \d\e F \d\e Y \a \l\a\s H:i" }} hrs</p>
+    {% if evento.descripcion %}
+        <p><strong>Detalles:</strong></p>
+        <p>{{ evento.descripcion|linebreaksbr }}</p>
+    {% else %}
+        <p><strong>Detalles:</strong> Sin detalles adicionales.</p>
+    {% endif %}
+</div>
+{% endblock %}

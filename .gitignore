@@ -1,0 +1,15 @@
+# Ignorar archivo de variables de entorno (¡Contiene tu API Key!)
+.env
+
+# Ignorar la base de datos de desarrollo
+db.sqlite3
+
+# Ignorar el entorno virtual
+venv/
+
+# Ignorar archivos compilados de Python
+__pycache__/
+*.pyc
+
+# Ignorar logs
+*.log
