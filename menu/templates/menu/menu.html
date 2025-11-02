@@ -69,5 +69,109 @@
             </div>
         </main>
     </div>
+</div>
+</main>
+
+<script>
+    // 1. Referencias a tus botones
+    const botonHablar = document.querySelector('.btn-hablar');
+    const botonDetener = document.querySelector('.btn-detener');
+    
+    // 2. URL DE TU N8N (DEBES CAMBIAR ESTO)
+    // Copia la "Production URL" de tu Nodo 1 en n8n y pégala aquí.
+    const n8nWebhookURL = "http://localhost:5678/webhook/registrar-por-voz";
+    
+    // Variables para la grabación
+    let mediaRecorder; // Objeto que graba
+    let audioChunks = []; // Array para guardar los pedazos de audio
+
+    // 3. Lógica del botón "Hablar con Tami"
+    botonHablar.addEventListener('click', async () => {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                
+                // 5. Esto se ejecuta cuando llamas a mediaRecorder.stop()
+                mediaRecorder.onstop = () => {
+                    // Convertimos los pedazos de audio en un solo archivo (Blob)
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    
+                    // Preparamos los datos para enviar a n8n
+                    const formData = new FormData();
+                    
+                    // AÑADIMOS EL ARCHIVO DE AUDIO
+                    // La clave "data" debe ser la misma que configuraste en el Nodo 1 de n8n
+                    // (si no pusiste nada, n8n usa "data" por defecto)
+                    formData.append("data", audioBlob, "grabacion-usuario.webm"); 
+                    
+                    // AÑADIMOS EL ID DEL USUARIO (¡MUY IMPORTANTE!)
+                    // Django reemplazará esto con el ID del usuario logueado.
+                    // Esto permite que tu API de Django (views.py) sepa QUIÉN está creando el evento.
+                    formData.append("userId", "{{ user.id }}");
+
+                    console.log("Enviando audio a n8n...");
+
+                    // 6. Enviamos todo a la URL de n8n
+                    fetch(n8nWebhookURL, {
+                        method: "POST",
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Respuesta recibida de n8n:", data);
+                        // 'data' es la respuesta de tu Nodo 5 ("Responder al Usuario")
+                        // Por ejemplo, si n8n responde con: { "respuesta": "OK, cita agendada" }
+                        // aquí lo puedes mostrar.
+                        alert("Tami dice: " + JSON.stringify(data)); 
+                    })
+                    .catch(error => {
+                        console.error("Error al enviar audio a n8n:", error);
+                        alert("Hubo un error al contactar a Tami.");
+                    });
+
+                    // Limpiamos para la próxima grabación
+                    audioChunks = [];
+                };
+                
+                // 4. Cada vez que el grabador tiene un pedazo de audio, lo guarda
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+                
+                // Empezamos a grabar
+                mediaRecorder.start();
+                
+                // Actualizamos la interfaz
+                botonHablar.disabled = true;
+                botonHablar.innerText = "Grabando...";
+                botonDetener.disabled = false;
+                
+            } catch (err) {
+                console.error("Error al acceder al micrófono:", err);
+                alert("No se pudo acceder al micrófono. Asegúrate de dar permisos.");
+            }
+        } else {
+            alert("Tu navegador no soporta la grabación de audio.");
+        }
+    });
+
+    // 7. Lógica del botón "Detener"
+    botonDetener.addEventListener('click', () => {
+        if (mediaRecorder) {
+            mediaRecorder.stop(); // Esto activa el evento "onstop" de arriba
+            
+            // Actualizamos la interfaz
+            botonHablar.disabled = false;
+            botonHablar.innerText = "Hablar con Tami";
+            botonDetener.disabled = true;
+        }
+    });
+    
+    // Estado inicial de los botones
+    botonDetener.disabled = true;
+
+</script>
+
 </body>
 </html>
