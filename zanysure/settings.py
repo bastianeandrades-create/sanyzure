@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'calendario',        
     'login',              
     'menu',                
-    'perfil_médico',       
+    'perfil_medico.apps.PerfilMedicoConfig',       
  
 ]
 

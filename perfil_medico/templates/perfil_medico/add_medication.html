@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Agregar medicamento</title></head>
+<body>
+  <h1>Agregar medicamento</h1>
+  <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+  </form>
+  <p><a href="{% url 'perfil:profile_view' %}">Volver</a></p>
+</body>
+</html>

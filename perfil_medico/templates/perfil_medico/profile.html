@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mi perfil - Sanyzure</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 18px; line-height:1.6; padding:16px; max-width:800px; margin:auto; }
+    h1,h2 { font-size: 24px; }
+    .card { border:1px solid #ccc; padding:12px; margin-bottom:12px; border-radius:8px; }
+    .btn { display:inline-block; padding:8px 12px; border-radius:6px; text-decoration:none; background:#0066cc; color:white; }
+    .danger { background:#c62828; }
+  </style>
+</head>
+<body>
+  <h1>Perfil médico</h1>
+  <p>Usuario: {{ request.user.get_full_name }} ({{ request.user.username }})</p>
+
+  <div class="card">
+    <h2>Datos personales</h2>
+    <p>Fecha de nacimiento: {{ profile.date_of_birth }}</p>
+    <p>Teléfono: {{ profile.phone }}</p>
+    <p>Contacto emergencia: {{ profile.emergency_contact }}</p>
+    <p>Canal preferido: {{ profile.get_preferred_channel_display }}</p>
+    <p><a class="btn" href="{% url 'perfil:edit_profile' %}">Editar perfil</a></p>
+  </div>
+
+  <div class="card">
+    <h2>Medicamentos</h2>
+    <p><a class="btn" href="{% url 'perfil:add_medication' %}">Agregar medicamento</a></p>
+    <ul>
+      {% for m in medications %}
+        <li>
+          <strong>{{ m.name }}</strong> — {{ m.dosage }} — {{ m.frequency }}
+          <a class="btn" href="{% url 'perfil:edit_medication' m.id %}">Editar</a>
+          <form style="display:inline" method="post" action="{% url 'perfil:delete_medication' m.id %}">{% csrf_token %}<button class="btn danger" type="submit">Eliminar</button></form>
+        </li>
+      {% empty %}
+        <li>No hay medicamentos registrados.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Exámenes</h2>
+    <p><a class="btn" href="{% url 'perfil:add_labtest' %}">Agregar examen</a></p>
+    <ul>
+      {% for t in labtests %}
+        <li><strong>{{ t.test_name }}</strong> — Próximo: {{ t.next_scheduled_date }} — Último: {{ t.last_date }}</li>
+      {% empty %}
+        <li>No hay exámenes registrados.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <p><a href="{% url 'menu' %}" class="btn">Volver al menú</a></p>
+</body>
+</html>

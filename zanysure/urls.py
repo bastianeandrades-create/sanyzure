@@ -25,5 +25,6 @@ urlpatterns = [
     path('calendario/', include('calendario.urls')), 
     path('login/', include('login.urls')),  
     path('menu/', include('menu.urls')),
-
+    path('perfil/', include('perfil_medico.urls', namespace='perfil')),
 ]
+
