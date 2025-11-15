@@ -11,21 +11,39 @@ except Exception:
     def create_or_update_event_for_medication(medication): pass
     def delete_event_for_medication(medication): pass
 
-@login_required
+@login_required 
 def profile_view(request):
-    profile = request.user.medical_profile
-    meds = profile.medications.all()
-    tests = profile.labtests.all()
-    allergies = profile.allergies.all()
-    conditions = profile.conditions.all()
+    # 1. Acceder al perfil médico del usuario logueado
+    # Esto funciona gracias al related_name='medical_profile' en el modelo
+    user_profile = request.user.medical_profile
 
-    return render(request, 'perfil_medico/profile.html', {
-        'profile': profile,
-        'medications': meds,
-        'labtests': tests,
-        'allergies': allergies,
-        'conditions': conditions
-    })
+    # Para datos relacionados (ej. medicamentos)
+    current_medications = user_profile.medications.all()
+    current_allergies = user_profile.allergies.all()
+    
+    # 2. Manejar la lógica del formulario para guardar datos
+    if request.method == 'POST':
+        # Asume que MedicalProfileForm se usa para actualizar los campos principales
+        form = MedicalProfileForm(request.POST, instance=user_profile)
+        
+        if form.is_valid():
+            form.save() # Guarda los cambios en el perfil del usuario
+            # Lógica para guardar/actualizar formularios anidados (Medications, etc.)
+            
+            # Redirecciona a la misma página o a un mensaje de éxito
+            return redirect('nombre_de_la_url_del_perfil') 
+    else:
+        # Pasa la instancia actual del perfil al formulario para que se precargue con los datos existentes
+        form = MedicalProfileForm(instance=user_profile)
+
+    context = {
+        'profile_form': form,
+        'medications': current_medications,
+        'allergies': current_allergies,
+        'user': request.user # Para mostrar el nombre de usuario, etc.
+    }
+    
+    return render(request, 'perfil_medico/profile.html', context)
 
 @login_required
 def edit_profile(request):
