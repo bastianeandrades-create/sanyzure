@@ -1,5 +1,3 @@
-# Ignorar archivo de variables de entorno (¡Contiene tu API Key!)
-.env
 
 # Ignorar la base de datos de desarrollo
 db.sqlite3
