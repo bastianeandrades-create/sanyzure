@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Cuenta - Sanyzure</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="login-page">
+
+    <div class="login-grid-container">
+
+        <aside class="login-mascot-container">
+            <img src="{% static 'img/tami-mascota.png' %}" alt="Mascota Tami saludando" class="login-mascot-img">
+            <h2 class="login-mascot-title">
+                ¡Qué bueno tenerte!
+                <span class="color-turquesa">Creemos tu cuenta</span>
+            </h2>
+            <p class="login-mascot-text">
+                Solo necesito unos pocos datos para empezar a ayudarte.
+            </p>
+            <a href="{% url 'tami_about' %}" class="login-mascot-link">Conoce más sobre mí &rarr;</a>
+        </aside>
+
+        <main class="login-container">
+            <h1 class="titulo-principal">Crear una cuenta</h1>
+            <p class="instruccion">Complete sus datos para registrarse.</p>
+
+            {% if form.errors %}
+                <div class="alerta-error">
+                    <p>Por favor, corrija los errores de abajo:</p>
+                    <ul style="margin-top: 10px; margin-bottom: 0;">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="campo-form">
+                    <label for="{{ form.username.id_for_label }}">1. Elija un nombre de usuario</label>
+                    {{ form.username }}
+                </div>
+                <div class="campo-form">
+                    <label for="{{ form.email.id_for_label }}">2. Escriba su correo electrónico</label>
+                    {{ form.email }}
+                </div>
+                <div class="campo-form">
+                    <label for="{{ form.password.id_for_label }}">3. Escriba su contraseña</label>
+                    {{ form.password }}
+                </div>
+                <div class="campo-form">
+                    <label for="{{ form.password2.id_for_label }}">4. Vuelva a escribir su contraseña</label>
+                    {{ form.password2 }}
+                </div>
+                <button type="submit" class="btn btn-ingresar">
+                    Crear mi cuenta
+                </button>
+            </form>
+
+            <div class="opciones-secundarias">
+                <a href="{% url 'login' %}" class="link-opcion">
+                    ¿Ya tiene cuenta? Ingrese aquí
+                </a>
+            </div>
+        </main>
+        
+    </div> </body>
+</html>

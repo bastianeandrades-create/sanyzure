@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hablar con Tami - Sanyzure</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="sub-page"> <a href="{% url 'menu' %}" class="btn-volver-flotante">
+        &larr; Volver al Menú
+    </a>
+
+    <header class="menu-header">
+        <div class="header-contenido">
+            <div class="saludo-usuario">
+                <img src="{% static 'img/logo.png' %}" alt="Logo Sanyzure" class="logo-header">
+                Hola, <strong>{{ nombre_usuario }}</strong>
+            </div>
+        </div>
+    </header>
+
+    <div class="tami-page-container">
+        
+        <aside class="tami-sidebar">
+            <h3 class="tami-sidebar-titulo">Herramientas</h3>
+            
+            <a href="{% url 'tami_about' %}" class="tami-sidebar-link">
+                <span class="icono-boton">🤖</span>
+                Conoce a Tami
+            </a>
+            
+            <a href="{% url 'tami_solicitudes' %}" class="tami-sidebar-link">
+                <span class="icono-boton">📜</span>
+                Solicitudes Anteriores
+            </a>
+            <div class="tami-sidebar-link-placeholder">
+                <span class="icono-boton">💡</span>
+                Comandos Útiles
+                <small>(Próximamente)</small>
+            </div>
+        </aside>
+
+        <main class="tami-main-content">
+            
+            <h1 class="titulo-principal" style="margin-bottom: 20px;">Hablar con Tami</h1>
+            <p class="instruccion" style="font-size: 1.5rem;">
+                Presiona el botón para comenzar a grabar tu recordatorio.
+            </p>
+
+            <div class="tami-boton-hablar-container">
+                <button class="tami-boton-hablar" id="btn-hablar-con-tami">
+                    <span class="icono-boton">🎙️</span>
+                    Presiona para hablar
+                </button>
+                <p class="tami-estado" id="tami-estado">Estoy escuchando...</p>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        const btnHablar = document.getElementById('btn-hablar-con-tami');
+        const estadoHablar = document.getElementById('tami-estado');
+        estadoHablar.style.display = 'none'; // Oculto por defecto
+
+        btnHablar.addEventListener('click', () => {
+            if (btnHablar.classList.contains('escuchando')) {
+                btnHablar.classList.remove('escuchando');
+                estadoHablar.style.display = 'none';
+                btnHablar.innerHTML = '<span class="icono-boton">🎙️</span> Presiona para hablar';
+            } else {
+                btnHablar.classList.add('escuchando');
+                estadoHablar.style.display = 'block';
+                btnHablar.innerHTML = '<span class="icono-boton">🛑</span> Hablando... (Presiona para parar)';
+            }
+        });
+    </script>
+
+</body>
+</html>

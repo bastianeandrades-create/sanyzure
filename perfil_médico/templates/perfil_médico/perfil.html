@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil Médico - Sanyzure</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="sub-page"> <a href="{% url 'menu' %}" class="btn-volver-flotante">
+        &larr; Volver al Menú
+    </a>
+
+    <header class="menu-header">
+        <div class="header-contenido">
+            <div class="saludo-usuario">
+                <img src="{% static 'img/logo.png' %}" alt="Logo Sanyzure" class="logo-header">
+                Hola, <strong>{{ nombre_usuario }}</strong>
+            </div>
+        </div>
+    </header>
+
+    <main class="menu-container">
+        
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <div class="alerta-exito"><p>{{ message }}</p></div>
+                {% else %}
+                    <div class="alerta-error"><p>{{ message }}</p></div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <h1 class="titulo-principal">Mi Perfil Médico</h1>
+        <p class="instruccion">
+            Administra tu información de salud y exporta tus historiales.
+        </p>
+    
+        <h2 class="titulo-seccion">Exportar Resumen de Salud (PDF)</h2>
+        <p class="instruccion" style="font-size: 1.1rem; text-align: left; margin-bottom: 25px;">
+            Descarga un archivo PDF con tu información. Ideal para compartir con tu médico.
+        </p>
+        
+        <div class="pdf-export-grid">
+            <a href="{% url 'exportar_perfil_pdf' %}?tipo=todo" class="btn-pdf btn-pdf-todo" target="_blank">
+                <span class="icono-boton">🖨️</span>
+                Exportar TODO
+                <small>(Perfil + Historial Completo)</small>
+            </a>
+            <a href="{% url 'exportar_perfil_pdf' %}?tipo=cita" class="btn-pdf btn-pdf-cita" target="_blank">
+                <span class="icono-boton">🗓️</span>
+                Historial de Citas
+            </a>
+            <a href="{% url 'exportar_perfil_pdf' %}?tipo=remedio" class="btn-pdf btn-pdf-remedio" target="_blank">
+                <span class="icono-boton">💊</span>
+                Historial de Remedios
+            </a>
+            <a href="{% url 'exportar_perfil_pdf' %}?tipo=procedimiento" class="btn-pdf btn-pdf-proc" target="_blank">
+                <span class="icono-boton">🩺</span>
+                Historial de Procedimientos
+            </a>
+        </div>
+
+
+        <h2 class="titulo-seccion">Actualizar Mi Perfil</h2>
+        <p class="instruccion" style="font-size: 1.1rem; text-align: left; margin-bottom: 25px;">
+            ¿Cómo prefieres actualizar tus datos (edad, peso, alergias, etc.)?
+        </p>
+
+        <div class="config-hub-grid">
+            <a href="{% url 'tami' %}" class="link-opcion btn-tami-ayuda">
+                <span class="icono-boton">🎙️</span>
+                Pedirle a Tami que lo haga (Voz)
+                <small>(Próximamente)</small>
+            </a>
+            
+            <a href="{% url 'perfil_editar' %}" class="link-opcion btn-hacer-solo">
+                <span class="icono-boton">✏️</span>
+                Lo haré yo mismo (Formulario)
+            </a>
+        </div>
+        
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - Sanyzure</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="sub-page"> <a href="{% url 'perfil' %}" class="btn-volver-flotante">
+        &larr; Volver al Perfil
+    </a>
+
+    <header class="menu-header">
+        <div class="header-contenido">
+            <div class="saludo-usuario">
+                <img src="{% static 'img/logo.png' %}" alt="Logo Sanyzure" class="logo-header">
+                Hola, <strong>{{ nombre_usuario }}</strong>
+            </div>
+        </div>
+    </header>
+
+    <main class="menu-container">
+        
+        <h1 class="titulo-principal">Editar mi Perfil Médico</h1>
+        <p class="instruccion">
+            Mantén esta información actualizada. Tu edad y peso son importantes para tus médicos.
+        </p>
+        
+        <div class="login-container" style="max-width: none; padding: 20px 30px; margin-top: 20px;">
+            <form method="post" class="modal-form">
+                {% csrf_token %}
+                
+                <div class="campo-form">
+                    <label for="{{ form.edad.id_for_label }}">{{ form.edad.label }}</label>
+                    {{ form.edad }}
+                </div>
+                
+                <div class="campo-form">
+                    <label for="{{ form.peso_kg.id_for_label }}">{{ form.peso_kg.label }}</label>
+                    {{ form.peso_kg }}
+                </div>
+                
+                <hr style="border: 1px solid #eee; margin: 30px 0;">
+
+                <div class="campo-form">
+                    <label for="{{ form.condiciones_medicas.id_for_label }}">{{ form.condiciones_medicas.label }}</label>
+                    <small style="color: #555; display: block; margin-bottom: 10px;">{{ form.condiciones_medicas.help_text }}</small>
+                    {{ form.condiciones_medicas }}
+                </div>
+                
+                <div class="campo-form">
+                    <label for="{{ form.alergias.id_for_label }}">{{ form.alergias.label }}</label>
+                    <small style="color: #555; display: block; margin-bottom: 10px;">{{ form.alergias.help_text }}</small>
+                    {{ form.alergias }}
+                </div>
+                
+                <div class="campo-form">
+                    <label for="{{ form.medicamentos_fijos.id_for_label }}">{{ form.medicamentos_fijos.label }}</label>
+                    <small style="color: #555; display: block; margin-bottom: 10px;">{{ form.medicamentos_fijos.help_text }}</small>
+                    {{ form.medicamentos_fijos }}
+                </div>
+                
+                <div class="campo-form">
+                    <label for="{{ form.contactos_emergencia.id_for_label }}">{{ form.contactos_emergencia.label }}</label>
+                    <small style="color: #555; display: block; margin-bottom: 10px;">{{ form.contactos_emergencia.help_text }}</small>
+                    {{ form.contactos_emergencia }}
+                </div>
+
+                <button type="submit" class="btn btn-ingresar">
+                    Guardar Cambios en mi Perfil
+                </button>
+            </form>
+        </div>
+    </main>
+
+</body>
+</html>

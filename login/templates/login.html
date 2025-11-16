@@ -3,36 +3,69 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingresar - Sanyzure</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="main">  	
-        <input type="checkbox" id="chk" aria-hidden="true">
+<body class="login-page"> <div class="login-grid-container">
 
-        <div class="signup">
+        <aside class="login-mascot-container">
+            <img src="{% static 'img/tami-mascota.png' %}" alt="Mascota Tami saludando" class="login-mascot-img">
+            <h2 class="login-mascot-title">
+                ¡Hola! Soy Tami,
+                <span class="color-turquesa">tu nueva amiga</span>
+            </h2>
+            <p class="login-mascot-text">
+                Estoy aquí para ayudarte a recordarlo todo.
+            </p>
+            <a href="{% url 'tami_about' %}" class="login-mascot-link">Conoce más sobre mí &rarr;</a>
+        </aside>
+
+        <main class="login-container">
+            
+            <h1 class="titulo-principal">Bienvenido a Sanyzure</h1>
+            <p class="instruccion">Por favor, ingrese sus datos para comenzar.</p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                        <div class="alerta-exito"><p>{{ message }}</p></div>
+                    {% else %}
+                        <div class="alerta-error"><p>{{ message }}</p></div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            {% if form.errors and not messages %}
+                <div class="alerta-error">
+                    <p>Sus datos no son correctos. Por favor, intente de nuevo.</p>
+                </div>
+            {% endif %}
+
             <form method="post">
                 {% csrf_token %}
-                <label for="chk" aria-hidden="true">Regístrate</label>
-                <input type="text" name="username" placeholder="Usuario" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password1" placeholder="Contraseña" required>
-                <input type="password" name="password2" placeholder="Confirmar contraseña" required>
-
-                <button type="submit">Aceptar</button>
+                <div class="campo-form">
+                    <label for="{{ form.username.id_for_label }}">1. Escriba su Nombre de Usuario</label>
+                    {{ form.username }}
+                </div>
+                <div class="campo-form">
+                    <label for="{{ form.password.id_for_label }}">2. Escriba su Contraseña</label>
+                    {{ form.password }}
+                </div>
+                <button type="submit" class="btn btn-ingresar">
+                    Ingresar a mi cuenta
+                </button>
             </form>
-        </div>
 
-        <div class="login">
-            <form method="post" action="{% url 'login' %}">
-                {% csrf_token %}
-                <label for="chk" aria-hidden="true">Inicia sesión</label>
-                {{ form.username }}
-                {{ form.password }}
-                <button type="submit">Aceptar</button>
-            </form>
-        </div>
-    </div>
-</body>
+            <div class="opciones-secundarias">
+                <a href="{% url 'password_reset' %}" class="link-opcion">
+                    ¿Olvidó su contraseña?
+                </a>
+                <a href="{% url 'registro' %}" class="link-opcion">
+                    ¿No tiene cuenta? Crear una aquí
+                </a>
+            </div>
+        </main>
+
+    </div> </body>
 </html>

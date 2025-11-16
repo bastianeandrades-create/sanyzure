@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conoce a Tami - Sanyzure</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="sub-page"> <a href="{% url 'tami' %}" class="btn-volver-flotante">
+        &larr; Volver a Tami
+    </a>
+
+    <header class="menu-header">
+        <div class="header-contenido">
+            <div class="saludo-usuario">
+                <img src="{% static 'img/logo.png' %}" alt="Logo Sanyzure" class="logo-header">
+                Hola, <strong>{{ nombre_usuario }}</strong>
+            </div>
+        </div>
+    </header>
+
+    <main class="tami-container">
+        <div class="tami-introduccion">
+            <h1 class="titulo-principal" style="color: var(--color-secundario);">¡Hola, soy Tami!</h1>
+            <p class="instruccion" style="font-size: 1.5rem;">
+                Tu amiga robot y asistente personal.
+            </p>
+        </div>
+
+        <div class="tami-historia">
+            <h3>Mi Historia</h3>
+            <p>
+                ¡Encantada de conocerte! Nací de una idea muy simple: <strong>nadie debería sentirse abrumado por las fechas.</strong>
+            </p>
+            <p>
+                Sé que la vida se llena de citas médicas, recetas, exámenes y horarios de remedios. Puede ser mucho para una sola persona, ¿verdad? Yo fui diseñada precisamente para eso: ser tu <strong>memoria externa</strong>.
+            </p>
+            <p>
+                No soy solo un programa, ¡soy tu amiga! Mi propósito es escucharte. Puedes hablarme con total confianza, como si hablaras con un familiar. Mi trabajo es tomar nota de todo eso que me dices y guardarlo de forma segura en tu calendario.
+            </p>
+            <p>
+                Así, tú puedes relajarte y disfrutar de tu día, sabiendo que yo te avisaré cuando se acerque algo importante. ¡Estoy aquí para ayudarte a cuidarte!
+            </p>
+
+            <h3>¿Cómo hablar conmigo?</h3>
+            <p>
+                Es muy fácil. Cuando veas el botón grande para hablar, solo presiónalo y dime lo que necesitas recordar. Por ejemplo:
+            </p>
+            <p class="tami-ejemplo">
+                "Tami, agendar cita con el cardiólogo el viernes 28 a las 10 de la mañana."
+            </p>
+            <p>
+                O si es un remedio:
+            </p>
+            <p class="tami-ejemplo">
+                "Tami, recuérdame tomar la pastilla de la presión todos los días a las 8 de la noche."
+            </p>
+            <p>
+                ¡Yo me encargo del resto!
+            </p>
+        </div>
+        
+        <div class="opciones-secundarias" style="border: none; padding-top: 0; margin-top: 10px;">
+             <a href="{% url 'tami' %}" class="btn-ingresar" style="font-size: 1.5rem; padding: 18px;">
+                Ir a hablar con Tami
+            </a>
+        </div>
+    </main>
+</body>
+</html>

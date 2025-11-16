@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuda y Tutoriales - Sanyzure</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="sub-page"> <a href="{% url 'menu' %}" class="btn-volver-flotante">
+        &larr; Volver al Menú
+    </a>
+
+    <header class="menu-header">
+        <div class="header-contenido">
+            <div class="saludo-usuario">
+                <img src="{% static 'img/logo.png' %}" alt="Logo Sanyzure" class="logo-header">
+                Hola, <strong>{{ request.user.first_name|default:request.user.username }}</strong>
+            </div>
+        </div>
+    </header>
+
+    <main class="menu-container">
+        <h1 class="titulo-principal">Centro de Ayuda</h1>
+        <p class="instruccion">Aquí respondemos sus dudas y le enseñamos a usar la aplicación.</p>
+
+        <h2 class="titulo-seccion">Preguntas Frecuentes</h2>
+        <div class="faq-container">
+
+            <details class="faq-item">
+                <summary class="faq-pregunta">
+                    ¿Cómo me recordará la aplicación mis citas o remedios?
+                </summary>
+                <div class="faq-respuesta">
+                    <p>¡Buena pregunta! Nuestro sistema funciona de dos maneras:</p>
+                    <ol>
+                        <li><strong>Correos Electrónicos:</strong> Le enviaremos un correo electrónico a la dirección que usó para registrarse.</li>
+                        <li><strong>Días de Aviso:</strong> Usted puede elegir cuántos días antes quiere que le recordemos sus citas (por ejemplo, 7 días antes, 3 días antes y 1 día antes).</li>
+                    </ol>
+                    <p>Para los remedios, el recordatorio se envía unas horas antes de la toma.</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-pregunta">
+                    ¿Quién es "Tami" y cómo funciona?
+                </summary>
+                <div class="faq-respuesta">
+                    <p>Tami es tu asistente personal y amiga robot. ¡Está aquí para ayudarte a recordar todo!</p>
+                    <p>Para conocer su historia y por qué te ayuda, puedes presionar el botón de "Tami" en el menú principal y luego presionar <strong>"Conoce a Tami"</strong>.</p>
+                    <p>Para usarla, solo debes presionar el botón grande de <strong>"Hablar con Tami"</strong> y decirle lo que quieres guardar. Por ejemplo: <strong>"Tami, tengo dentista el lunes 20 a las 4 de la tarde"</strong>.</p>
+                    <p>¡Tami lo guardará en tu calendario por ti!</p>
+                </div>
+            </details>
+
+            <details class="faq-item">
+                <summary class="faq-pregunta">
+                    ¿Qué pasa si me equivoco al dictarle una fecha a Tami?
+                </summary>
+                <div class="faq-respuesta">
+                    <p>¡No se preocupe! Todos nos podemos equivocar. </p>
+                    <p>Si le da una instrucción incorrecta a Tami, usted puede ir a la sección de <strong>"Calendario"</strong>. Allí verá todas sus fechas guardadas y podrá <strong>editar</strong> o <strong>borrar</strong> el evento que quedó mal.</p>
+                </div>
+            </details>
+
+        </div>
+
+
+        <h2 class="titulo-seccion">Tutoriales Paso a Paso</h2>
+        <div class="tutorial-container">
+            
+            <div class="tutorial-card">
+                <h3>Tutorial: Cómo agregar una fecha (con la voz)</h3>
+                <ol class="tutorial-pasos">
+                    <li>En el Menú Principal, presione el botón grande azul que dice <strong>"Hablar con Tami"</strong>.</li>
+                    <li>Se abrirá la página de Tami. En la columna de la derecha, presione el botón grande con el micrófono (🎙️).</li>
+                    <li>El botón se pondrá de color rojo y dirá "Hablando...". ¡Eso significa que Tami lo está escuchando!</li>
+                    <li>Hable con calma y claridad. Diga el tipo de evento, el nombre y la fecha. Por ejemplo: <i>"Guardar remedio, tomar Losartán, todos los días a las 10 de la mañana."</i></li>
+                    <li>Cuando termine de hablar, presione el botón rojo de nuevo.</li>
+                    <li>¡Listo! Tami guardará el evento. Puede revisarlo en su <strong>Calendario</strong>.</li>
+                </ol>
+            </div>
+
+            <div class="tutorial-card">
+                <h3>Tutorial: Cómo ver, editar o borrar una fecha</h3>
+                <ol class="tutorial-pasos">
+                    <li>En el Menú Principal, presione el botón grande turquesa que dice <strong>"Calendario"</strong>.</li>
+                    <li>Verá sus semanas. Puede usar las <strong>flechas rojas ( < > )</strong> a los lados para avanzar o retroceder de semana.</li>
+                    <li>Busque el día que tiene el evento que quiere cambiar.</li>
+                    <li>En la tarjeta del evento, verá dos botones pequeños:
+                        <ul>
+                            <li>El lápiz (✏️) es para <strong>Editar</strong> el evento.</li>
+                            <li>El basurero (🗑️) es para <strong>Borrar</strong> el evento (le pedirá confirmación).</li>
+                        </ul>
+                    </li>
+                    <li>Presione el que necesite y siga las instrucciones.</li>
+                </ol>
+            </div>
+
+        </div>
+
+    </main>
+</body>
+</html>

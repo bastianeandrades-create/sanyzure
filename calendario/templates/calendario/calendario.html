@@ -1,0 +1,206 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Calendario - Sanyzure</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="sub-page">
+
+    <a href="{% url 'menu' %}" class="btn-volver-flotante">
+        &larr; Volver al Menú
+    </a>
+
+    <header class="menu-header">
+        <div class="header-contenido">
+            <a href="#" class="btn-anadir-header" id="btn-anadir-header">
+                <span class="icono-boton-header">+</span> Añadir Evento
+            </a>
+            <div class="saludo-usuario">
+                <img src="{% static 'img/logo.png' %}" alt="Logo Sanyzure" class="logo-header">
+                Hola, <strong>{{ request.user.first_name|default:request.user.username }}</strong>
+            </div>
+        </div>
+    </header>
+
+    <div class="calendario-mes-header" id="calendario-mes-ano">
+        Cargando...
+    </div>
+
+    <main class="timeline-wrapper-container">
+        
+        <button class="btn-scroll-nav btn-scroll-left" id="btn-scroll-left" title="Semana Anterior">
+            &#9664;
+        </button>
+
+        <div class="timeline-wrapper" id="timeline-wrapper">
+            <div class="timeline-container">
+                
+                {% for week in weeks_data %}
+                <div class="week-card" id="{{ week.week_id }}" data-month-year="{{ week.month_year_header }}">
+                    
+                    {% for day in week.dias %}
+                    <div class="day-card 
+                         {% if day.is_today %}today{% endif %}
+                         {% if day.is_placeholder %}placeholder{% endif %}
+                         {% if day.is_past %}is-past{% endif %}
+                         {% if day.is_holiday %}is-holiday{% endif %}
+                         {% if day.day_of_week == 5 %}is-saturday{% endif %}
+                         {% if day.day_of_week == 6 %}is-sunday{% endif %}
+                         {% if day.events and not day.is_past and not day.is_placeholder %}has-events{% endif %}"
+                         id="day-{{ day.date_iso }}">
+                        
+                        <div class="day-card-header">
+                            <span class="day-name">{{ day.date_obj|date:"l" }}</span>
+                            
+                            {% if day.is_first_of_month or day.is_today and not day.is_placeholder %}
+                            <span class="day-month-short">{{ day.date_obj|date:"M" }}</span>
+                            {% endif %}
+                            
+                            <span class="day-number">{{ day.date_obj|date:"d" }}</span>
+                        </div>
+                        
+                        {% if not day.is_placeholder %}
+                        <div class="day-card-body">
+                            {% if day.events %}
+                                {% for evento in day.events %}
+                                <div class="evento-en-tarjeta tipo-{{ evento.tipo_evento }}">
+                                    <div class="evento-info">
+                                        <strong class="evento-titulo-tarjeta">{{ evento.titulo }}</strong>
+                                        <span class="evento-hora-tarjeta">{{ evento.fecha_hora_evento|time:"H:i" }} hs</span>
+                                        <p class="evento-desc-tarjeta">{{ evento.descripcion|truncatewords:10|default:"" }}</p>
+                                    </div>
+                                    <div class="evento-acciones">
+                                        <a href="{% url 'editar_evento' evento.id %}" class="btn-accion btn-editar" title="Editar Evento">✏️</a>
+                                        <form action="{% url 'borrar_evento' evento.id %}" method="post" style="display:inline;" onsubmit="return confirm('¿Está seguro que desea borrar este evento?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn-accion btn-borrar" title="Borrar Evento">🗑️</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="evento-vacio-tarjeta">
+                                    <p>No hay eventos este día.</p>
+                                </div>
+                            {% endif %}
+
+                            <div class="day-card-add-link-wrapper">
+                                <a href="#" class="day-card-add-link" data-date="{{ day.date_iso }}">+ Añadir a este día</a>
+                            </div>
+
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <button class="btn-scroll-nav btn-scroll-right" id="btn-scroll-right" title="Semana Siguiente">
+            &#9654;
+        </button>
+
+    </main>
+
+    <button class="fab" id="btn-abrir-modal-anadir" title="Añadir Nuevo Evento">+</button>
+
+    <div class="modal-backdrop" id="evento-modal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" id="btn-cerrar-modal">×</button>
+            <h2 class="titulo-principal">Añadir Nuevo Evento</h2>
+            <p class="instruccion">Complete los datos de su cita o remedio.</p>
+            <form action="{% url 'calendario' %}" method="post" class="modal-form">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="campo-form">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<small style="color: #555;">{{ field.help_text }}</small>{% endif %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn-ingresar">Guardar Evento</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const wrapper = document.getElementById('timeline-wrapper');
+            const todayWeek = document.getElementById('{{ today_week_id }}');
+            const monthYearHeader = document.getElementById('calendario-mes-ano');
+            const btnLeft = document.getElementById('btn-scroll-left');
+            const btnRight = document.getElementById('btn-scroll-right');
+            const modal = document.getElementById('evento-modal');
+            const btnCerrar = document.getElementById('btn-cerrar-modal');
+            const btnAbrirFAB = document.getElementById('btn-abrir-modal-anadir');
+            const btnAbrirHeader = document.getElementById('btn-anadir-header');
+            const allBtnAbrirDia = document.querySelectorAll('.day-card-add-link');
+            const inputFechaModal = document.querySelector('#evento-modal input[name="fecha_hora_evento"]');
+
+            if (todayWeek) {
+                todayWeek.scrollIntoView({
+                    behavior: 'auto',
+                    block: 'nearest',
+                    inline: 'center'
+                });
+            }
+            btnLeft.addEventListener('click', () => {
+                wrapper.scrollBy({ left: -wrapper.clientWidth, behavior: 'smooth' });
+            });
+            btnRight.addEventListener('click', () => {
+                wrapper.scrollBy({ left: wrapper.clientWidth, behavior: 'smooth' });
+            });
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                        monthYearHeader.textContent = entry.target.getAttribute('data-month-year');
+                    }
+                });
+            }, { root: wrapper, threshold: 0.5 });
+            document.querySelectorAll('.week-card').forEach(card => {
+                observer.observe(card);
+            });
+
+            function abrirModal(fechaISO = '') {
+                if (fechaISO && inputFechaModal) {
+                    inputFechaModal.value = `${fechaISO}T09:00`;
+                } else if (inputFechaModal) {
+                    inputFechaModal.value = '';
+                }
+                modal.style.display = 'flex';
+            }
+
+            btnAbrirFAB.addEventListener('click', (e) => {
+                e.preventDefault();
+                abrirModal();
+            });
+            btnAbrirHeader.addEventListener('click', (e) => {
+                e.preventDefault();
+                abrirModal();
+            });
+            allBtnAbrirDia.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const fecha = e.target.getAttribute('data-date');
+                    abrirModal(fecha);
+                });
+            });
+
+            btnCerrar.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

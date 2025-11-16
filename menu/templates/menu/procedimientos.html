@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tareas de Hoy - Sanyzure</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="sub-page">
+
+    <a href="{% url 'menu' %}" class="btn-volver-flotante">
+        &larr; Volver al Menú
+    </a>
+
+    <header class="menu-header">
+        <div class="header-contenido">
+            <div class="saludo-usuario">
+                <img src="{% static 'img/logo.png' %}" alt="Logo Sanyzure" class="logo-header">
+                Hola, <strong>{{ nombre_usuario }}</strong>
+            </div>
+        </div>
+    </header>
+
+    <main class="menu-container">
+        <h1 class="titulo-principal">Tareas de Hoy</h1>
+        <p class="instruccion">
+            Esta es tu lista de remedios y procedimientos para hoy, {{ fecha_hoy|date:"l d \d\e F" }}.
+            <br>¡Marca las tareas a medida que las vayas completando!
+        </p>
+        
+        <section class="proximos-eventos tareas-list">
+            <div class="lista-eventos">
+                
+                {% if tareas %}
+                    {% for tarea in tareas %}
+                        <form class="evento-item-tarea {% if tarea.completado %}completado{% endif %}"
+                              action="{% url 'toggle_completado' tarea.id %}" method="post">
+                            {% csrf_token %}
+                            
+                            <button type="submit" class="btn-check" title="Marcar como completado">
+                                {% if tarea.completado %}
+                                    <span class="check-icon">✓</span>
+                                {% else %}
+                                    <span class="check-icon empty"></span>
+                                {% endif %}
+                            </button>
+                            
+                            <div class="evento-titulo">
+                                <strong class="{% if tarea.completado %}tachado{% endif %}">
+                                    {{ tarea.titulo }}
+                                </strong>
+                                <small class="{% if tarea.completado %}tachado{% endif %}">
+                                    ({{ tarea.get_tipo_evento_display }}) - 
+                                    Agendado para las {{ tarea.fecha_hora_evento|time:"H:i" }} hs
+                                </small>
+                            </div>
+                            
+                            <div class="evento-acciones-lista">
+                                <a href="{% url 'editar_evento' tarea.id %}" class="btn-accion btn-editar" title="Editar Tarea">✏️</a>
+                            </div>
+                        </form>
+                    {% endfor %}
+                {% else %}
+                    <p class="evento-vacio">¡Felicitaciones! No tienes remedios ni procedimientos agendados para hoy.</p>
+                {% endif %}
+
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

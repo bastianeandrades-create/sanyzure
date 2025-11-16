@@ -4,174 +4,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asistente Salud - Tami</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <title>Menú Principal - Sanyzure</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body>
-    <div class="contenedor-pagina">
-
-        <aside class="menu-lateral">
-            <div class="logo-titulo">
-                <i class="fa-solid fa-heartbeat"></i>
-                <span class="titulo-asistente">Asistente Salud</span>
+<body class="sub-page"> <header class="menu-header">
+        <div class="header-contenido">
+            <div class="saludo-usuario">
+                <img src="{% static 'img/logo.png' %}" alt="Logo Sanyzure" class="logo-header">
+                Hola, <strong>{{ nombre_usuario }}</strong>
             </div>
+            <a href="{% url 'logout' %}" class="btn-salir">Cerrar Sesión</a>
+        </div>
+    </header>
 
-            <div class="seccion-bienvenida">
-                <h2>Bienvenido/a</h2>
-                <p>Use la columna central para hablar con la IA. Los botones grandes de abajo lo llevan a su Perfil Médico y Calendario.</p>
+    <main class="menu-container">
+
+        <section class="proximos-eventos">
+            <h2>Próximo en 7 días</h2>
+            <div class="lista-eventos">
+                {% if eventos_proximos %}
+                    {% for evento in eventos_proximos %}
+                        <div class="evento-item">
+                            <span class="evento-fecha">{{ evento.fecha_hora_evento|date:"D d M" }}</span>
+                            <span class="evento-titulo">{{ evento.titulo }}</span>
+                            <span class="evento-hora">{{ evento.fecha_hora_evento|time:"H:i" }} hs</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="evento-vacio">No tiene eventos programados para esta semana.</p>
+                {% endif %}
             </div>
+        </section>
 
-            <nav class="navegacion-principal">
-                <button class="btn-menu activo">
-                    <i class="fa-solid fa-stars"></i>
-                    Asistente Tami
-                </button>
-                <button class="btn-menu">
-                    <i class="fa-solid fa-notes-medical"></i>
-                    Perfil Médico
-                </button>
-                <button class="btn-menu">
-                    <i class="fa-solid fa-calendar-alt"></i>
-                    Calendario
-                </button>
-            </nav>
+        <h2 class="titulo-seccion">¿Qué desea hacer?</h2>
+        <div class="menu-grid menu-grid-expandido"> <a href="{% url 'tami' %}" class="menu-boton boton-principal boton-tami">
+                <span class="icono-boton">🎙️</span>
+                Agendar con Tami (Voz)
+            </a>
 
-            <div class="seccion-sugerencias">
-                <h3>Sugerencias</h3>
-                <ul>
-                    <li>Use "Asistente Tami" para pedir recordatorios o hacer preguntas.</li>
-                    <li>Abra "Perfil Médico" para ver alergias, medicación y contactos de emergencia.</li>
-                    <li>Entre a "Calendario" para visualizar sus próximas consultas médicas.</li>
-                    <li>Toque una sola vez el botón que necesita.</li>
-                </ul>
-            </div>
-        </aside>
-
-        <main class="contenido-principal">
-            <div class="tarjeta-asistente">
-                <div class="icono-central">
-                    <i class="fa-solid fa-sparkles"></i>
-                </div>
-
-                <div class="interaccion-chat">
-                    <button class="btn-chat btn-hablar">
-                        <i class="fa-solid fa-microphone"></i>
-                        Hablar con Tami
-                    </button>
-                    <button class="btn-chat btn-detener">
-                        <i class="fa-solid fa-stop-circle"></i>
-                        Detener
-                    </button>
-                </div>
-
-                <p class="instruccion">Entre a *"Calendario"* para visualizar sus próximas consultas médicas.</p>
-            </div>
-        </main>
-    </div>
-</div>
-</main>
-
-<script>
-    // 1. Referencias a tus botones
-    const botonHablar = document.querySelector('.btn-hablar');
-    const botonDetener = document.querySelector('.btn-detener');
-    
-    // 2. URL DE TU N8N (DEBES CAMBIAR ESTO)
-    // Copia la "Production URL" de tu Nodo 1 en n8n y pégala aquí.
-    const n8nWebhookURL = "http://127.0.0.1:5678/webhook/registrar-por-voz";
-    
-    // Variables para la grabación
-    let mediaRecorder; // Objeto que graba
-    let audioChunks = []; // Array para guardar los pedazos de audio
-
-    // 3. Lógica del botón "Hablar con Tami"
-    botonHablar.addEventListener('click', async () => {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                
-                // 5. Esto se ejecuta cuando llamas a mediaRecorder.stop()
-                mediaRecorder.onstop = () => {
-                    // Convertimos los pedazos de audio en un solo archivo (Blob)
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    
-                    // Preparamos los datos para enviar a n8n
-                    const formData = new FormData();
-                    
-                    // AÑADIMOS EL ARCHIVO DE AUDIO
-                    // La clave "data" debe ser la misma que configuraste en el Nodo 1 de n8n
-                    // (si no pusiste nada, n8n usa "data" por defecto)
-                    formData.append("data", audioBlob, "grabacion-usuario.webm"); 
-                    
-                    // AÑADIMOS EL ID DEL USUARIO (¡MUY IMPORTANTE!)
-                    // Django reemplazará esto con el ID del usuario logueado.
-                    // Esto permite que tu API de Django (views.py) sepa QUIÉN está creando el evento.
-                    formData.append("userId", "{{ user.id }}");
-
-                    console.log("Enviando audio a n8n...");
-
-                    // 6. Enviamos todo a la URL de n8n
-                    fetch(n8nWebhookURL, {
-                        method: "POST",
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Respuesta recibida de n8n:", data);
-                        // 'data' es la respuesta de tu Nodo 5 ("Responder al Usuario")
-                        // Por ejemplo, si n8n responde con: { "respuesta": "OK, cita agendada" }
-                        // aquí lo puedes mostrar.
-                        alert("Tami dice: " + JSON.stringify(data)); 
-                    })
-                    .catch(error => {
-                        console.error("Error al enviar audio a n8n:", error);
-                        alert("Hubo un error al contactar a Tami.");
-                    });
-
-                    // Limpiamos para la próxima grabación
-                    audioChunks = [];
-                };
-                
-                // 4. Cada vez que el grabador tiene un pedazo de audio, lo guarda
-                mediaRecorder.ondataavailable = (event) => {
-                    audioChunks.push(event.data);
-                };
-                
-                // Empezamos a grabar
-                mediaRecorder.start();
-                
-                // Actualizamos la interfaz
-                botonHablar.disabled = true;
-                botonHablar.innerText = "Grabando...";
-                botonDetener.disabled = false;
-                
-            } catch (err) {
-                console.error("Error al acceder al micrófono:", err);
-                alert("No se pudo acceder al micrófono. Asegúrate de dar permisos.");
-            }
-        } else {
-            alert("Tu navegador no soporta la grabación de audio.");
-        }
-    });
-
-    // 7. Lógica del botón "Detener"
-    botonDetener.addEventListener('click', () => {
-        if (mediaRecorder) {
-            mediaRecorder.stop(); // Esto activa el evento "onstop" de arriba
+            <a href="{% url 'calendario' %}" class="menu-boton boton-principal">
+                <span class="icono-boton">📅</span>
+                Ver Calendario Completo
+            </a>
             
-            // Actualizamos la interfaz
-            botonHablar.disabled = false;
-            botonHablar.innerText = "Hablar con Tami";
-            botonDetener.disabled = true;
-        }
-    });
-    
-    // Estado inicial de los botones
-    botonDetener.disabled = true;
+            <a href="{% url 'procedimientos' %}" class="menu-boton boton-terciario">
+                <span class="icono-boton">✓</span>
+                Tareas de Hoy
+            </a>
 
-</script>
+            <a href="{% url 'proximas_citas' %}" class="menu-boton boton-secundario">
+                <span class="icono-boton">🗓️</span>
+                Próximas Citas
+            </a>
+
+            <a href="{% url 'proximos_remedios' %}" class="menu-boton boton-secundario">
+                <span class="icono-boton">💊</span>
+                Próximos Remedios
+            </a>
+
+            <a href="{% url 'perfil' %}" class="menu-boton">
+                <span class="icono-boton">🩺</span>
+                Perfil Médico
+            </a>
+
+            <a href="{% url 'ayuda' %}" class="menu-boton">
+                <span class="icono-boton">❓</span>
+                Preguntas y Ayuda
+            </a>
+
+        </div>
+    </main>
 
 </body>
 </html>

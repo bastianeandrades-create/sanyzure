@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Apps de terceros
-    'rest_framework',      
+    'rest_framework',
+    'django_apscheduler',      
 
     # nuestras apps
     'calendario',        
@@ -70,7 +71,7 @@ ROOT_URLCONF = 'zanysure.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'America/Santiago'
 
@@ -131,6 +132,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# --- AÑADE ESTE BLOQUE ---
+# Le decimos a Django dónde encontrar nuestra carpeta 'static' global.
+# (Asegúrate de que 'BASE_DIR' esté definido al principio de tu settings.py)
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -176,3 +184,16 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated', 
     ]
 }
+# --- Configuración de Email para el sistema de Django (Reinicio de Contraseña) ---
+# Usamos el SMTP de Brevo (antes Sendinblue)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-relay.brevo.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+# Carga el usuario y la clave API desde tus variables .env
+# ¡IMPORTANTE! La clave API de Brevo funciona como la contraseña del SMTP.
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('BREVO_API_KEY') 
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER # El email desde el que se enviarán

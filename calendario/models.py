@@ -20,11 +20,14 @@ class EventoMedico(models.Model):
     recordatorio_cita_dias = models.CharField(max_length=50, blank=True, help_text="Días antes para recordar citas/procs (ej: '7,3,1')")
     recordatorio_remedio_horas = models.PositiveIntegerField(default=1, help_text="Horas antes para recordar toma de remedio")
 
-    # Campo para evitar duplicados (versión simple)
     ultimo_recordatorio_enviado = models.DateTimeField(blank=True, null=True, editable=False)
 
     creado_en = models.DateTimeField(auto_now_add=True)
     actualizado_en = models.DateTimeField(auto_now=True)
+    
+    # --- ¡LÍNEA NUEVA AÑADIDA! ---
+    completado = models.BooleanField(default=False, help_text="Marcar si el evento fue completado por el usuario")
+    # --- FIN DE LA LÍNEA NUEVA ---
 
     def __str__(self):
         fecha_local = timezone.localtime(self.fecha_hora_evento)
@@ -32,5 +35,5 @@ class EventoMedico(models.Model):
 
     class Meta:
         ordering = ['fecha_hora_evento'] 
-        verbose_name = "Evento Médico" # Nombre legible en admin
+        verbose_name = "Evento Médico"
         verbose_name_plural = "Eventos Médicos"

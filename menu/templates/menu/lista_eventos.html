@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo_pagina }} - Sanyzure</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="sub-page">
+
+    <a href="{% url 'menu' %}" class="btn-volver-flotante">
+        &larr; Volver al Menú
+    </a>
+
+    <header class="menu-header">
+        <div class="header-contenido">
+            <div class="saludo-usuario">
+                <img src="{% static 'img/logo.png' %}" alt="Logo Sanyzure" class="logo-header">
+                Hola, <strong>{{ nombre_usuario }}</strong>
+            </div>
+        </div>
+    </header>
+
+    <main class="menu-container">
+        <h1 class="titulo-principal">{{ titulo_pagina|default:"Mi Historial" }}</h1>
+        <p class="instruccion">
+            {{ subtitulo_pagina|default:"Aquí está la lista de tus eventos." }}
+        </p>
+        
+        <section class="proximos-eventos solicitudes-list">
+            <div class="lista-eventos">
+                
+                {% if eventos_proximos %}
+                    {% for evento in eventos_proximos %}
+                        <div class="evento-item">
+                            <span class="evento-fecha">
+                                {% if evento.creado_en and not titulo_pagina %}
+                                    Creado el:<br>
+                                    {{ evento.creado_en|date:"d M Y" }}
+                                {% else %}
+                                    Fecha Evento:<br>
+                                    {{ evento.fecha_hora_evento|date:"d M Y" }}
+                                {% endif %}
+                            </span>
+                            
+                            <span class="evento-titulo">
+                                <strong>{{ evento.titulo }}</strong>
+                                <small>({{ evento.get_tipo_evento_display }}) - Agendado para el: {{ evento.fecha_hora_evento|date:"d/m/Y" }} a las {{ evento.fecha_hora_evento|time:"H:i" }}</small>
+                            </span>
+                            
+                            <span class="evento-acciones-lista">
+                                <a href="{% url 'editar_evento' evento.id %}" class="btn-accion btn-editar" title="Editar Evento">✏️</a>
+                                <form action="{% url 'borrar_evento' evento.id %}" method="post" style="display:inline;" onsubmit="return confirm('¿Está seguro que desea borrar este evento?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-accion btn-borrar" title="Borrar Evento">🗑️</button>
+                                </form>
+                            </span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="evento-vacio">No hay eventos próximos para mostrar en esta sección.</p>
+                {% endif %}
+
+            </div>
+        </section>
+
+        {% if eventos_pasados %}
+        <div class="faq-container" style="margin-top: 30px;">
+            <details class="faq-item">
+                <summary class="faq-pregunta">
+                    Ver Historial de Eventos Pasados
+                </summary>
+                <div class="faq-respuesta" style="padding: 0;">
+                    <section class="proximos-eventos solicitudes-list" style="box-shadow: none; padding: 0; border: none;">
+                        <div class="lista-eventos">
+                            {% for evento in eventos_pasados %}
+                                <div class="evento-item evento-pasado">
+                                    <span class="evento-fecha">
+                                        Fecha Evento:<br>
+                                        {{ evento.fecha_hora_evento|date:"d M Y" }}
+                                    </span>
+                                    
+                                    <span class="evento-titulo">
+                                        <strong>{{ evento.titulo }}</strong>
+                                        <small>({{ evento.get_tipo_evento_display }}) - Agendado para el: {{ evento.fecha_hora_evento|date:"d/m/Y" }} a las {{ evento.fecha_hora_evento|time:"H:i" }}</small>
+                                    </span>
+                                    
+                                    <span class="evento-acciones-lista">
+                                        <a href="{% url 'editar_evento' evento.id %}" class="btn-accion btn-editar" title="Editar Evento">✏️</a>
+                                    </span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                </div>
+            </details>
+        </div>
+        {% endif %}
+        
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Evento - Sanyzure</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="sub-page login-page"> <a href="{% url 'calendario' %}" class="btn-volver-flotante">
+        &larr; Volver al Calendario
+    </a>
+
+    <header class="menu-header">
+        <div class="header-contenido">
+            <div class="saludo-usuario">
+                <img src="{% static 'img/logo.png' %}" alt="Logo Sanyzure" class="logo-header">
+                Hola, <strong>{{ request.user.first_name|default:request.user.username }}</strong>
+            </div>
+        </div>
+    </header>
+
+    <main class="login-container" style="margin-top: 30px;">
+        <h1 class="titulo-principal">Editar Evento</h1>
+        <p class="instruccion">Modifique los datos de su evento.</p>
+
+        <form method="post" class="modal-form">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="campo-form">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <small style="color: #555;">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-ingresar">
+                Guardar Cambios
+            </button>
+        </form>
+    </main>
+
+</body>
+</html>
