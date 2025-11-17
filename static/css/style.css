@@ -28,7 +28,7 @@ body {
     margin: 0;
     padding: 0;
     line-height: 1.6;
-    /* CAMBIO: Ligeramente más pequeño para mejor encuadre */
+    /* REDUCCIÓN DE FUENTE PARA ENCUADRE */
     font-size: 105%; 
 }
 
@@ -918,23 +918,24 @@ body.sub-page {
     /* Posicionamiento del contenedor principal */
     position: fixed;
     bottom: 30px;
-    right: 150px; /* MOVIDO MÁS A LA IZQUIERDA para que el mensaje no se corte */
-    width: 120px; /* Tamaño del cuadrado */
+    /* MOVEMOS EL BOTÓN A LA IZQUIERDA PARA DAR ESPACIO AL MENSAJE */
+    right: 150px; 
+    width: 120px; 
     height: 120px; 
-    background-color: var(--color-secundario); /* Fondo CUADRADO azul */
+    background-color: var(--color-secundario); 
     border: 5px solid var(--color-primario);
-    border-radius: 15px; /* Bordes suaves para la estética */
+    border-radius: 15px; 
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6); 
     cursor: pointer;
     transition: all 0.2s ease;
     z-index: 950; 
     text-decoration: none;
     padding: 0;
+    /* Usamos flexbox para centrar la imagen */
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end; /* Alinear el contenido a la parte inferior */
-    align-items: center;
-    overflow: visible; /* Permitir que el texto salga */
+    justify-content: center;
+    align-items: center; 
+    overflow: visible; 
     text-align: center;
 }
 .btn-tami-flotante:hover {
@@ -943,12 +944,8 @@ body.sub-page {
     border-color: var(--color-focus);
 }
 .btn-tami-flotante img {
-    /* El delfín ahora flota sobre el centro del cuadrado */
-    position: absolute;
-    top: 15px; 
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px; /* Tamaño optimizado del delfín */
+    /* Centrado por Flexbox del padre */
+    width: 80px; 
     height: 80px;
     object-fit: contain; 
     display: block;
@@ -957,6 +954,7 @@ body.sub-page {
 }
 /* Estilo del mensaje que flota sobre el botón (CLARO Y BIEN ENCUADRADO) */
 .tami-flotante-text {
+    /* Posicionamiento ABSOLUTO sobre el botón, centrado horizontalmente */
     position: absolute;
     top: -30px; 
     left: 50%;
