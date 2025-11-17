@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hablar con Tami - Sanyzure</title>
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/pages.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body class="sub-page">
 
@@ -48,12 +47,15 @@
         <main class="tami-main-content">
             
             <div class="tami-talk-box">
-                <img src="{% static 'img/tami-normal.png' %}" alt="Tami, Asistente de Voz" class="tami-talk-img">
+                <img src="{% static 'img/tami-normal.png' %}" alt="Tami, Asistente de Voz" class="tami-talk-img tami-normal">
 
                 <h1 class="tami-greeting-text">
-                    Hola {{ nombre_usuario }}, soy Tami.<br> 
-                    Estoy lista para escuchar.
+                    ¡Hola {{ nombre_usuario }}! <br> 
+                    Soy Tami, tu nueva amiga.
                 </h1>
+                <p class="tami-greeting-message">
+                    Estoy lista para escuchar. Presiona el botón y cuéntame lo que necesitas agendar.
+                </p>
             </div>
             
 
