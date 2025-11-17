@@ -129,6 +129,11 @@
         </div>
     </div>
 
+    <a href="{% url 'tami' %}" class="btn-tami-flotante" title="Hablar con Tami">
+        <span class="tami-flotante-text">Presióname si necesitas ayuda</span>
+        <img src="{% static 'img/tami-mascota.png' %}" alt="Tami, tu asistente">
+    </a>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const wrapper = document.getElementById('timeline-wrapper');
@@ -144,12 +149,22 @@
             const inputFechaModal = document.querySelector('#evento-modal input[name="fecha_hora_evento"]');
 
             if (todayWeek) {
-                todayWeek.scrollIntoView({
-                    behavior: 'auto',
-                    block: 'nearest',
-                    inline: 'center'
-                });
+                // CORRECCIÓN: Calcular el desplazamiento para centrar la semana
+                const centerOffset = (wrapper.clientWidth / 2) - (todayWeek.clientWidth / 2);
+                wrapper.scrollLeft = todayWeek.offsetLeft - centerOffset;
+                
+                // Fallback para centrado
+                setTimeout(() => {
+                    if (Math.abs(wrapper.scrollLeft - (todayWeek.offsetLeft - centerOffset)) > 5) {
+                        todayWeek.scrollIntoView({
+                            behavior: 'auto',
+                            block: 'nearest',
+                            inline: 'center'
+                        });
+                    }
+                }, 100);
             }
+
             btnLeft.addEventListener('click', () => {
                 wrapper.scrollBy({ left: -wrapper.clientWidth, behavior: 'smooth' });
             });
@@ -168,10 +183,23 @@
             });
 
             function abrirModal(fechaISO = '') {
+                const now = new Date();
+                
                 if (fechaISO && inputFechaModal) {
-                    inputFechaModal.value = `${fechaISO}T09:00`;
+                    const selectedDate = new Date(fechaISO);
+                    // Usar la hora actual si es hoy, si no, usar 09:00
+                    if (selectedDate.toDateString() === now.toDateString()) {
+                        const hour = now.getHours().toString().padStart(2, '0');
+                        const minute = now.getMinutes().toString().padStart(2, '0');
+                        inputFechaModal.value = `${fechaISO}T${hour}:${minute}`;
+                    } else {
+                        inputFechaModal.value = `${fechaISO}T09:00`;
+                    }
                 } else if (inputFechaModal) {
-                    inputFechaModal.value = '';
+                    // Inicializar con fecha y hora actual si no se pasa fecha
+                    const dateISO = now.toISOString().split('T')[0];
+                    const time = now.toTimeString().split(' ')[0].substring(0, 5);
+                    inputFechaModal.value = `${dateISO}T${time}`;
                 }
                 modal.style.display = 'flex';
             }

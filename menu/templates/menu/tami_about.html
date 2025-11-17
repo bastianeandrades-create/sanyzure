@@ -50,9 +50,6 @@
             <p class="tami-ejemplo">
                 "Tami, agendar cita con el cardiólogo el viernes 28 a las 10 de la mañana."
             </p>
-            <p>
-                O si es un remedio:
-            </p>
             <p class="tami-ejemplo">
                 "Tami, recuérdame tomar la pastilla de la presión todos los días a las 8 de la noche."
             </p>
@@ -67,5 +64,11 @@
             </a>
         </div>
     </main>
+
+    <a href="{% url 'tami' %}" class="btn-tami-flotante" title="Hablar con Tami">
+        <span class="tami-flotante-text">Presióname si necesitas ayuda</span>
+        <img src="{% static 'img/tami-mascota.png' %}" alt="Tami, tu asistente">
+    </a>
+
 </body>
 </html>

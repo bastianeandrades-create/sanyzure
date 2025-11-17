@@ -7,7 +7,7 @@
     <title>Editar Evento - Sanyzure</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body class="sub-page login-page"> <a href="{% url 'calendario' %}" class="btn-volver-flotante">
+<body class="sub-page"> <a href="{% url 'calendario' %}" class="btn-volver-flotante">
         &larr; Volver al Calendario
     </a>
 
@@ -42,6 +42,11 @@
             </button>
         </form>
     </main>
+
+    <a href="{% url 'tami' %}" class="btn-tami-flotante" title="Hablar con Tami">
+        <span class="tami-flotante-text">Presióname si necesitas ayuda</span>
+        <img src="{% static 'img/tami-mascota.png' %}" alt="Tami, tu asistente">
+    </a>
 
 </body>
 </html>

@@ -7,7 +7,7 @@
     <title>Hablar con Tami - Sanyzure</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body class="sub-page">
+<body class="sub-page tami-page">
 
     <a href="{% url 'menu' %}" class="btn-volver-flotante">
         &larr; Volver al Menú
@@ -69,6 +69,11 @@
 
         </main>
     </div>
+
+    <a href="{% url 'tami' %}" class="btn-tami-flotante" title="Hablar con Tami">
+        <span class="tami-flotante-text">Presióname si necesitas ayuda</span>
+        <img src="{% static 'img/tami-mascota.png' %}" alt="Tami, tu asistente">
+    </a>
 
     <script>
         const btnHablar = document.getElementById('btn-hablar-con-tami');

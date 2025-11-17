@@ -28,7 +28,8 @@ body {
     margin: 0;
     padding: 0;
     line-height: 1.6;
-    font-size: 115%;
+    /* CAMBIO: Ligeramente más pequeño para mejor encuadre */
+    font-size: 105%; 
 }
 
 /* ======================================================= */
@@ -671,21 +672,26 @@ body.sub-page {
 }
 .timeline-wrapper::-webkit-scrollbar { display: none; }
 
+/* FIX CALENDARIO: Asegura el ancho mínimo y usa flex para contener */
 .timeline-container {
     height: 100%;
     display: flex;
     padding: 0;
+    width: fit-content; 
+    min-width: 100%;
 }
 
 .week-card {
     scroll-snap-align: center;
     flex-shrink: 0;
-    width: 100vw;
+    /* Ajuste para que cada semana ocupe todo el ancho visual */
+    width: calc(100vw - 40px); /* 100vw menos el padding horizontal de body */
+    max-width: none;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: stretch;
-    padding: 20px 100px;
+    padding: 20px 100px; /* Padding interno para que los botones de scroll no tapen */
     box-sizing: border-box;
     gap: 10px;
 }
@@ -907,6 +913,76 @@ body.sub-page {
     transform: scale(1.05) rotate(90deg);
 }
 
+/* MODIFICADO: Botón Flotante de Tami como CUADRADO GRANDE y CENTRADO */
+.btn-tami-flotante {
+    /* Posicionamiento del contenedor principal */
+    position: fixed;
+    bottom: 30px;
+    right: 150px; /* MOVIDO MÁS A LA IZQUIERDA para que el mensaje no se corte */
+    width: 120px; /* Tamaño del cuadrado */
+    height: 120px; 
+    background-color: var(--color-secundario); /* Fondo CUADRADO azul */
+    border: 5px solid var(--color-primario);
+    border-radius: 15px; /* Bordes suaves para la estética */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6); 
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 950; 
+    text-decoration: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Alinear el contenido a la parte inferior */
+    align-items: center;
+    overflow: visible; /* Permitir que el texto salga */
+    text-align: center;
+}
+.btn-tami-flotante:hover {
+    background-color: var(--color-focus); 
+    transform: scale(1.15); /* Efecto de acercamiento */
+    border-color: var(--color-focus);
+}
+.btn-tami-flotante img {
+    /* El delfín ahora flota sobre el centro del cuadrado */
+    position: absolute;
+    top: 15px; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px; /* Tamaño optimizado del delfín */
+    height: 80px;
+    object-fit: contain; 
+    display: block;
+    animation: float 4s ease-in-out infinite;
+    z-index: 951;
+}
+/* Estilo del mensaje que flota sobre el botón (CLARO Y BIEN ENCUADRADO) */
+.tami-flotante-text {
+    position: absolute;
+    top: -30px; 
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 1.1rem; 
+    font-weight: 900;
+    color: var(--color-secundario);
+    background-color: var(--color-fondo-card); 
+    border-radius: 8px;
+    padding: 8px 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border: 3px solid var(--color-primario); 
+    z-index: 952;
+    pointer-events: none; 
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+
+/* Regla para ocultar el botón flotante en la propia página de Tami */
+body.tami-page .btn-tami-flotante {
+    display: none;
+}
+
+
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -948,6 +1024,34 @@ body.sub-page {
 /* ======================================================= */
 /* --- 9. ESTILOS DE TAMI (2 Columnas y "Conoce a") --- */
 /* ======================================================= */
+
+/* Ajustes para la página de conversación de Tami (tami.html) */
+.tami-talk-box {
+    text-align: center; /* Aseguramos que el contenido esté centrado */
+    padding: 20px 0; /* Añadimos un poco de padding */
+}
+.tami-talk-box .tami-talk-img { 
+    /* CAMBIO: Se ajusta el tamaño del delfín de chat */
+    max-width: 150px; 
+    height: auto;
+    margin: 20px auto; /* Espacio y centrado */
+    display: block; /* Para asegurar el centrado con margin auto */
+    /* Mantenemos la animación en la imagen (float) para que se vea viva */
+    animation: float 4s ease-in-out infinite; 
+}
+.tami-greeting-text {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--color-secundario);
+    line-height: 1.3;
+    margin: 0;
+}
+.tami-greeting-message {
+    font-size: 1.3rem; /* Lo mantenemos grande para accesibilidad */
+    color: #333;
+    margin: 15px 0;
+}
+
 
 .tami-page-container {
     display: flex;
@@ -1461,8 +1565,9 @@ body.sub-page {
     }
     .week-card {
         display: block;
-        width: 100vw;
-        padding: 10px;
+        /* Quitamos el padding horizontal extra en móvil */
+        width: 100vw; 
+        padding: 10px; 
         white-space: nowrap;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
@@ -1506,5 +1611,26 @@ body.sub-page {
     }
     .login-mascot-text {
         font-size: 1.1rem;
+    }
+    
+    /* Ajustes para el FAB en móvil */
+    .btn-tami-flotante {
+        bottom: 15px;
+        right: 15px;
+        width: 80px; /* Tamaño grande para móvil */
+        height: 80px;
+        border-width: 4px;
+        border-radius: 12px; /* Cuadrado con bordes suaves en móvil */
+    }
+    .btn-tami-flotante img {
+        width: 70%;
+        height: 70%;
+        margin-top: 5px;
+    }
+    .tami-flotante-text {
+        font-size: 0.7rem; /* Reducir aún más el texto en móvil */
+        top: -15px;
+        padding: 4px 6px;
+        border-width: 2px;
     }
 }
